@@ -1,0 +1,517 @@
+{
+ "run": "v1",
+ "sluice": "0xfE2eb041585B7FE25B92285Bb1062aB766C6615B",
+ "ballast": "0xd1590EBBA44Cd2d00e003053811E47b9d2209668",
+ "started": "2026-10-20T01:26:39.439Z",
+ "events": [
+  {
+   "t": "2026-10-20T01:26:39.473Z",
+   "msg": "sluice 0xfE2eb041585B7FE25B92285Bb1062aB766C6615B, target 0xd1590EBBA44Cd2d00e003053811E47b9d2209668"
+  },
+  {
+   "t": "2026-10-20T01:27:05.454Z",
+   "msg": "create_rule covered-30d 0xd859ec1909 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0xd859ec190965c73918141d5b94a2000166f7c0346cb133f0c6d29fcca93a998e",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:27:29.436Z",
+   "msg": "create_rule covered-1h 0x24ca6204ff ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x24ca6204ff686a8594c42f226ed6237c54e0d408dba26b1afbdff0d0d887fd3f",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:27:55.653Z",
+   "msg": "create_rule strict 0x0310af1585 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x0310af158521545e6a737ebffdcea871c3b5abbc8bcd2a2f829b7658b6ee3024",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:28:09.746Z",
+   "msg": "create_rule floor-ok 0x39634aeb3f ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x39634aeb3ffbe3d082137491d7a0d17fd6e9bed11795fc888f390c6ed354708b",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:28:47.544Z",
+   "msg": "create_rule floor-high 0xa3eded006b ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0xa3eded006b7e58054d6f6c7ac8762b196be7edc7978b3a855d577bcb837a5b2e",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:29:00.889Z",
+   "msg": "create_rule no-monitor 0x15e87b4d7a ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x15e87b4d7a9c325b7c00544ca3aee7f0a6cc55544bd53d9b637de8d81aaf05a4",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:29:14.181Z",
+   "msg": "create_rule real-wallet 0x304a318c55 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x304a318c558d13788bade5be2b72ca0d9e3ed2c25c222b7d1ea0bbcb53fc6421",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:29:15.835Z",
+   "msg": "check covered-30d  -> open=true code=ok age=92642  open",
+   "id": "covered-30d",
+   "verdict": {
+    "age": 92642,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:17.506Z",
+   "msg": "check covered-1h   -> open=false code=stale field=at age=92642  at is older than the allowed age",
+   "id": "covered-1h",
+   "verdict": {
+    "age": 92642,
+    "code": "stale",
+    "field": "at",
+    "message": "at is older than the allowed age",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:19.288Z",
+   "msg": "check strict       -> open=false code=not_true field=covered age=-1  covered is not true",
+   "id": "strict",
+   "verdict": {
+    "age": -1,
+    "code": "not_true",
+    "field": "covered",
+    "message": "covered is not true",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:20.995Z",
+   "msg": "check floor-ok     -> open=true code=ok age=92698  open",
+   "id": "floor-ok",
+   "verdict": {
+    "age": 92698,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:22.745Z",
+   "msg": "check floor-high   -> open=false code=below_min field=ratio_bps age=92698  ratio_bps is below the floor",
+   "id": "floor-high",
+   "verdict": {
+    "age": 92698,
+    "code": "below_min",
+    "field": "ratio_bps",
+    "message": "ratio_bps is below the floor",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:24.446Z",
+   "msg": "check no-monitor   -> open=false code=unreadable age=-1  The target could not be read in finalized state",
+   "id": "no-monitor",
+   "verdict": {
+    "age": -1,
+    "code": "unreadable",
+    "field": "",
+    "message": "The target could not be read in finalized state",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:26.206Z",
+   "msg": "check real-wallet  -> open=true code=ok age=30184  open",
+   "id": "real-wallet",
+   "verdict": {
+    "age": 30184,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:29:28.683Z",
+   "msg": "check_pinned refused: \"The rule is not the one expected\""
+  },
+  {
+   "t": "2026-10-20T01:29:30.096Z",
+   "msg": "check refused: \"now must be a whole number of seconds\""
+  },
+  {
+   "t": "2026-10-20T01:29:31.303Z",
+   "msg": "check refused: \"datatRule not found\""
+  },
+  {
+   "t": "2026-10-20T01:29:33.049Z",
+   "msg": "check_pinned with the right hash -> ok"
+  },
+  {
+   "t": "2026-10-20T01:30:11.916Z",
+   "msg": "record covered-30d 0x061941a7fa ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0x061941a7fadb04449aa1f538c6ffd2868421ef1897e94754ae5db18a421e8bc7",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:30:39.081Z",
+   "msg": "record covered-1h 0xf9f27c9639 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0xf9f27c9639951d65c5c999f1a8a0a04f30d6ff005d5652c64d73c93196373d22",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:31:28.513Z",
+   "msg": "record strict 0x3c5df6eeb0 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0x3c5df6eeb0dc41ca52fb6e6ba45a6296ef3d7ff55482bcaebb9891a3c3a0ae9e",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:32:06.580Z",
+   "msg": "record floor-ok 0x8d4b9da065 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0x8d4b9da065eda64d6b33085b08ad900332b3aefe864bf0d5b525bfbbf9883df6",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:32:35.113Z",
+   "msg": "sluice 0xfE2eb041585B7FE25B92285Bb1062aB766C6615B, target 0xd1590EBBA44Cd2d00e003053811E47b9d2209668"
+  },
+  {
+   "t": "2026-10-20T01:32:35.113Z",
+   "msg": "create_rule covered-30d already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule covered-1h already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule strict already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule floor-ok already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule floor-high already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule no-monitor already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:35.114Z",
+   "msg": "create_rule real-wallet already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-20T01:32:37.789Z",
+   "msg": "check covered-30d  -> open=true code=ok age=92843  open",
+   "id": "covered-30d",
+   "verdict": {
+    "age": 92843,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:39.449Z",
+   "msg": "check covered-1h   -> open=false code=stale field=at age=92843  at is older than the allowed age",
+   "id": "covered-1h",
+   "verdict": {
+    "age": 92843,
+    "code": "stale",
+    "field": "at",
+    "message": "at is older than the allowed age",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:41.277Z",
+   "msg": "check strict       -> open=false code=not_true field=covered age=-1  covered is not true",
+   "id": "strict",
+   "verdict": {
+    "age": -1,
+    "code": "not_true",
+    "field": "covered",
+    "message": "covered is not true",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:43.113Z",
+   "msg": "check floor-ok     -> open=true code=ok age=92899  open",
+   "id": "floor-ok",
+   "verdict": {
+    "age": 92899,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:44.871Z",
+   "msg": "check floor-high   -> open=false code=below_min field=ratio_bps age=92899  ratio_bps is below the floor",
+   "id": "floor-high",
+   "verdict": {
+    "age": 92899,
+    "code": "below_min",
+    "field": "ratio_bps",
+    "message": "ratio_bps is below the floor",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:46.908Z",
+   "msg": "check no-monitor   -> open=false code=unreadable age=-1  The target could not be read in finalized state",
+   "id": "no-monitor",
+   "verdict": {
+    "age": -1,
+    "code": "unreadable",
+    "field": "",
+    "message": "The target could not be read in finalized state",
+    "open": false
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:48.650Z",
+   "msg": "check real-wallet  -> open=true code=ok age=30385  open",
+   "id": "real-wallet",
+   "verdict": {
+    "age": 30385,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   }
+  },
+  {
+   "t": "2026-10-20T01:32:51.432Z",
+   "msg": "check_pinned refused: \"The rule is not the one expected\""
+  },
+  {
+   "t": "2026-10-20T01:32:52.713Z",
+   "msg": "check refused: \"now must be a whole number of seconds\""
+  },
+  {
+   "t": "2026-10-20T01:32:54.384Z",
+   "msg": "check refused: \"datatRule not found\""
+  },
+  {
+   "t": "2026-10-20T01:32:56.096Z",
+   "msg": "check_pinned with the right hash -> ok"
+  },
+  {
+   "t": "2026-10-20T01:33:27.909Z",
+   "msg": "record floor-high 0x5aeb1d9e0e ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0x5aeb1d9e0e6c90753bcb7c532727ab08b016d66339bd05f967e9059279eb1dec",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:33:48.485Z",
+   "msg": "record no-monitor 0xcdf1502415 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0xcdf150241540783ec68b4faddcd83a3793b978ac911e7edc01aea6f6840ecd4b",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:34:09.257Z",
+   "msg": "record real-wallet 0x8470c2973a ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "record",
+   "hash": "0x8470c2973a8dd8e05f8efa9d33476508bac12259983901710611eaadc3a2b856",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T01:34:15.542Z",
+   "msg": "every verdict recorded on chain matches the one read"
+  },
+  {
+   "t": "2026-10-20T01:34:15.542Z",
+   "msg": "waiting for the rules to finalize before a consumer reads them"
+  },
+  {
+   "t": "2026-10-20T02:00:07.681Z",
+   "msg": "create_rule real-wallet FINALIZED 25.9 min after the wait began"
+  },
+  {
+   "t": "2026-10-20T02:00:21.528Z",
+   "msg": "consumer (open rule) deployed: 0x53c26A3c45574482Dc210f339bB9E9e5a4fDcdD4",
+   "hash": "0xbe4edaaf987e192038b2478c6bbfd0611f5bedd68eb74e8fc8b28c6ed51042cc",
+   "address": "0x53c26A3c45574482Dc210f339bB9E9e5a4fDcdD4"
+  },
+  {
+   "t": "2026-10-20T02:00:35.890Z",
+   "msg": "consumer (closed rule) deployed: 0x0f60e8930bE235fBF55f5E91BaCD058C19d17808",
+   "hash": "0xae5cc85c4cca0b7877555c63ad7ab2ab443faaf2a70dd1903c2dd6d75ef2fa6f",
+   "address": "0x0f60e8930bE235fBF55f5E91BaCD058C19d17808"
+  },
+  {
+   "t": "2026-10-20T02:01:01.957Z",
+   "msg": "consumer.perform (open rule) 0xb200db4662 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "perform",
+   "hash": "0xb200db466228b0a9689c78afb9c0754ea6d75d92f27afcc544bcde827431a9ae",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-20T02:01:03.115Z",
+   "msg": "the consumer acted: performed=1, note \"acted on an open rule\""
+  },
+  {
+   "t": "2026-10-20T02:01:31.058Z",
+   "msg": "the closed consumer was refused: \"Refused: not_true covered\"",
+   "hash": "0x69f7d5d29248ec66c5343349e890a66fbd9ccf96a63375d574dc69c3716844b0"
+  }
+ ],
+ "rules": {
+  "covered-30d": {
+   "verdict": {
+    "age": 92843,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   },
+   "expected": "ok",
+   "recorded": {
+    "last_open": true,
+    "last_code": "ok",
+    "last_at": 1792459798
+   }
+  },
+  "covered-1h": {
+   "verdict": {
+    "age": 92843,
+    "code": "stale",
+    "field": "at",
+    "message": "at is older than the allowed age",
+    "open": false
+   },
+   "expected": "stale",
+   "recorded": {
+    "last_open": false,
+    "last_code": "stale",
+    "last_at": 1792459826
+   }
+  },
+  "strict": {
+   "verdict": {
+    "age": -1,
+    "code": "not_true",
+    "field": "covered",
+    "message": "covered is not true",
+    "open": false
+   },
+   "expected": "not_true",
+   "recorded": {
+    "last_open": false,
+    "last_code": "not_true",
+    "last_at": 1792459865
+   }
+  },
+  "floor-ok": {
+   "verdict": {
+    "age": 92899,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   },
+   "expected": "ok",
+   "recorded": {
+    "last_open": true,
+    "last_code": "ok",
+    "last_at": 1792459914
+   }
+  },
+  "floor-high": {
+   "verdict": {
+    "age": 92899,
+    "code": "below_min",
+    "field": "ratio_bps",
+    "message": "ratio_bps is below the floor",
+    "open": false
+   },
+   "expected": "below_min",
+   "recorded": {
+    "last_open": false,
+    "last_code": "below_min",
+    "last_at": 1792459995
+   }
+  },
+  "no-monitor": {
+   "verdict": {
+    "age": -1,
+    "code": "unreadable",
+    "field": "",
+    "message": "The target could not be read in finalized state",
+    "open": false
+   },
+   "expected": "unreadable",
+   "recorded": {
+    "last_open": false,
+    "last_code": "unreadable",
+    "last_at": 1792460015
+   }
+  },
+  "real-wallet": {
+   "verdict": {
+    "age": 30385,
+    "code": "ok",
+    "field": "",
+    "message": "open",
+    "open": true
+   },
+   "expected": "ok",
+   "recorded": {
+    "last_open": true,
+    "last_code": "ok",
+    "last_at": 1792460036
+   }
+  }
+ },
+ "consumers": {
+  "open": {
+   "address": "0x53c26A3c45574482Dc210f339bB9E9e5a4fDcdD4",
+   "hash": "0xbe4edaaf987e192038b2478c6bbfd0611f5bedd68eb74e8fc8b28c6ed51042cc",
+   "act": "0xb200db466228b0a9689c78afb9c0754ea6d75d92f27afcc544bcde827431a9ae"
+  },
+  "closed": {
+   "address": "0x0f60e8930bE235fBF55f5E91BaCD058C19d17808",
+   "hash": "0xae5cc85c4cca0b7877555c63ad7ab2ab443faaf2a70dd1903c2dd6d75ef2fa6f",
+   "refused": "0x69f7d5d29248ec66c5343349e890a66fbd9ccf96a63375d574dc69c3716844b0"
+  }
+ },
+ "finished": "2026-10-20T02:01:31.058Z"
+}

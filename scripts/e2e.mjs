@@ -4,7 +4,7 @@
 // Seven rules over real Ballast monitors, each checked with the contract's own answer, then recorded on chain. After the rules have
 // FINALIZED, two small consumer contracts read Sluice's answer from finalized state: one acts, one is refused with Sluice's reason.
 // That second part is the nested finalized read (consumer -> Sluice -> Ballast).
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { WALLETS, clientFor, read, reader, reasonOf, send, sleep, ts } from "./lib.mjs";
 
 const S = process.env.SLUICE;
@@ -12,7 +12,11 @@ const RUN = process.env.RUN || Date.now().toString(36);
 const BALLAST = "0xd1590EBBA44Cd2d00e003053811E47b9d2209668";
 const deployer = clientFor("gl-test-1");
 const caller = clientFor("gl-test-2");
-const LOG = { run: RUN, sluice: S, ballast: BALLAST, started: new Date().toISOString(), events: [], rules: {}, consumers: {} };
+// A run that stopped part way (a script error, never a contract one) can be resumed: rules and records already on chain are not sent again.
+const LOGFILE = `scripts/e2e-log-${RUN}.json`;
+const PREV = process.env.RESUME && existsSync(LOGFILE) ? JSON.parse(readFileSync(LOGFILE, "utf8")) : null;
+const LOG = { run: RUN, sluice: S, ballast: BALLAST, started: PREV?.started ?? new Date().toISOString(), events: PREV?.events ?? [], rules: {}, consumers: {} };
+const prevHash = (id) => PREV?.events.find((e) => e.fn === "create_rule" && e.msg.startsWith(`create_rule ${id} `) && (e.status === "ACCEPTED" || e.status === "FINALIZED"))?.hash;
 const log = (msg, extra) => {
   console.log(`[${ts()}] ${msg}`);
   LOG.events.push({ t: new Date().toISOString(), msg, ...(extra || {}) });
@@ -70,6 +74,11 @@ try {
   // 1. the rules
   const created = [];
   for (const [id, monitor, mt, mf, fresh, age, floorField, floor] of RULES) {
+    if (prevHash(id)) {
+      created.push([id, prevHash(id)]);
+      log(`create_rule ${id} already on chain (resumed)`);
+      continue;
+    }
     const r = await accepted(deployer, S, "create_rule", [id, BALLAST, "get_latest", JSON.stringify([monitor]), mt, mf, fresh, age, floorField, floor], `create_rule ${id}`);
     created.push([id, r.hash]);
   }
@@ -98,10 +107,17 @@ try {
   log(`check_pinned with the right hash -> ${pinned.code}`);
   // 4. record the verdicts on chain
   for (const [id] of RULES) {
-    await accepted(caller, S, "record", [id], `record ${id}`);
-    const r = await read(S, "get_rule", [id]);
     const want = LOG.rules[id].expected;
-    if (r.last_code !== want || r.records !== 1) throw new Error(`record ${id}: stored ${r.last_code} x${r.records}, expected ${want}`);
+    let r = await read(S, "get_rule", [id]);
+    if (Number(r.records) === 0) {
+      await accepted(caller, S, "record", [id], `record ${id}`);
+      // a read-back can lag a just-accepted write: poll before judging it
+      for (let i = 0; i < 40 && Number(r.records) === 0; i++) {
+        await sleep(5000);
+        r = await read(S, "get_rule", [id]);
+      }
+    }
+    if (r.last_code !== want || Number(r.records) !== 1) throw new Error(`record ${id}: stored ${r.last_code} x${r.records}, expected ${want}`);
     LOG.rules[id].recorded = { last_open: r.last_open, last_code: r.last_code, last_at: r.last_at };
   }
   log("every verdict recorded on chain matches the one read");
