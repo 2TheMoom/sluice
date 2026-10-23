@@ -19,6 +19,15 @@ PAGE = 50
 ID_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-"
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
 NAME_CHARS = LETTERS + "0123456789_"
+MAX_URL = 300
+MAX_BODY = 2_000_000  # largest page an observation will read
+MAX_PATH = 100
+MAX_VALUE = 200
+MIN_RECHECK = 300  # seconds between two recorded observations of one rule
+HEADERS = {"Accept": "application/json,text/plain,*/*", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+LABEL = "abcdefghijklmnopqrstuvwxyz0123456789-"
+SEG = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"
+INTERNAL = ("local", "internal", "lan", "localhost", "home", "corp", "intranet", "localdomain", "arpa")
 
 
 def _bad(c: bool, m: str) -> None:
@@ -52,6 +61,84 @@ def _names(s, what: str) -> list:
     return out
 
 
+def _url(u) -> str:
+    _bad(not isinstance(u, str) or not u.startswith("https://") or len(u) > MAX_URL, f"url must be https, at most {MAX_URL} characters")
+    for ch in u:
+        _bad(ch.isspace() or ch in "\"'<>\\`|", "url has a forbidden character")
+    h = u[8:].split("/", 1)[0].split("?", 1)[0].split("#", 1)[0].lower()
+    _bad("@" in h or ":" in h, "url may not have credentials or a port")
+    p = h.split(".")
+    _bad(len(p) < 2 or p[-1] in INTERNAL or not any(c.isalpha() for c in p[-1]), "url host must be a public domain name")
+    for x in p:
+        _bad(not 1 <= len(x) <= 63 or x[0] == "-" or x[-1] == "-" or any(c not in LABEL for c in x), "invalid url host")
+    return u.split("#", 1)[0]
+
+
+def _fact(url, path, value, max_age) -> tuple:
+    """The external fact a rule may carry, or ("", "", "", 0) for none: one field of a public JSON page must read exactly as value."""
+    _bad(any(not isinstance(x, str) for x in (url, path, value)) or not _int(max_age), "fact terms must be strings, and fact_max_age a whole number")
+    if url == "":
+        _bad(path != "" or value != "" or max_age != 0, "fact terms need a url")
+        return ("", "", "", 0)
+    u = _url(url)
+    _bad(len(path) > MAX_PATH or any(not 1 <= len(s) <= 40 or any(c not in SEG for c in s) for s in path.split(".")), "path is dot-separated names or list positions")  # an empty path is an empty segment
+    _bad(not 1 <= len(value) <= MAX_VALUE, f"value must be 1 to {MAX_VALUE} characters")
+    _bad(not MIN_AGE <= max_age <= MAX_AGE, f"fact_max_age must be {MIN_AGE} to {MAX_AGE} seconds")
+    return (u, path, value, max_age)
+
+
+def _text(v) -> str:
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    if v is None:
+        return "null"
+    if isinstance(v, str):
+        return v
+    if isinstance(v, (int, float)):
+        return json.dumps(v)
+    return ""
+
+
+def _met(body: bytes, path: str, value: str) -> bool:
+    """Does the field at the path of the JSON page read exactly as the value?"""
+    try:
+        cur = json.loads(body.decode("utf-8"))
+    except Exception:
+        return False
+    for seg in path.split("."):
+        if isinstance(cur, dict) and seg in cur:
+            cur = cur[seg]
+        elif isinstance(cur, list) and seg.isdigit() and int(seg) < len(cur):
+            cur = cur[int(seg)]
+        else:
+            return False
+    return _text(cur) == value
+
+
+def _look(url: str, path: str, value: str) -> dict:
+    """One validator (the leader) fetches the page and proposes whether the fact holds. Every other validator fetches it again on its
+    own and votes to accept only if it reaches the same answer. An unreadable page is its own answer, and it records nothing."""
+    def leader_fn() -> dict:
+        try:
+            r = gl.nondet.web.request(url, method="GET", headers=HEADERS)
+        except Exception:
+            return {"kind": "unreadable", "met": False}
+        if r.status != 200 or not r.body or len(r.body) > MAX_BODY:
+            return {"kind": "unreadable", "met": False}
+        return {"kind": "read", "met": _met(r.body, path, value)}
+
+    def validator_fn(res) -> bool:
+        if not isinstance(res, gl.vm.Return):
+            return False
+        t = res.calldata
+        if not isinstance(t, dict) or not isinstance(t.get("kind"), str) or not isinstance(t.get("met"), bool):
+            return False
+        m = leader_fn()
+        return m["kind"] == t["kind"] and m["met"] == t["met"]
+
+    return gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+
+
 @allow_storage
 @dataclass
 class Rule:
@@ -71,6 +158,13 @@ class Rule:
     last_open: bool
     last_code: str
     last_at: u256
+    fact_url: str
+    fact_path: str
+    fact_value: str
+    fact_max_age: u256
+    obs_at: u256
+    obs_met: bool
+    observations: u256
 
 
 def _closed(code: str, field: str, message: str, age: int = -1) -> dict:
@@ -134,11 +228,30 @@ class Sluice(gl.Contract):
                 return _closed("wrong_type", f, f"{f} is not a whole number")
             if ans[f] < int(r.min_value):
                 return _closed("below_min", f, f"{f} is below the floor", age)
+        if r.fact_url != "":
+            if int(r.obs_at) == 0:
+                return _closed("no_observation", "", "The page has not been observed yet", age)
+            if int(r.obs_at) > now:
+                return _closed("future", "observation", "The observation is later than the caller's clock", age)
+            oage = now - int(r.obs_at)
+            if oage > int(r.fact_max_age):
+                return _closed("observation_stale", "", "The observation is older than the allowed age", oage)
+            if not r.obs_met:
+                return _closed("observation_not_met", "", "The page does not show the expected value", oage)
         return {"open": True, "code": "ok", "field": "", "message": "open", "age": age}
 
     @gl.public.write
     def create_rule(self, rule_id: str, target: str, method: str, args: str, must_true: str, must_false: str, fresh_field: str, max_age: int, min_field: str, min_value: int) -> None:
         """Declares a rule. It can never be changed. args is a JSON list of up to four strings or whole numbers, the field lists are comma separated."""
+        self._create(rule_id, target, method, args, must_true, must_false, fresh_field, max_age, min_field, min_value, ("", "", "", 0))
+
+    @gl.public.write
+    def create_rule_with_fact(self, rule_id: str, target: str, method: str, args: str, must_true: str, must_false: str, fresh_field: str, max_age: int, min_field: str, min_value: int, fact_url: str, fact_path: str, fact_value: str, fact_max_age: int) -> None:
+        """The same rule, plus one external fact fixed now: a field of a public JSON page that must read exactly as fact_value. The
+        validators settle it with observe(), and the rule is open only while that observation is met and no older than fact_max_age."""
+        self._create(rule_id, target, method, args, must_true, must_false, fresh_field, max_age, min_field, min_value, _fact(fact_url, fact_path, fact_value, fact_max_age))
+
+    def _create(self, rule_id: str, target: str, method: str, args: str, must_true: str, must_false: str, fresh_field: str, max_age: int, min_field: str, min_value: int, fact: tuple) -> None:
         _bad(not isinstance(rule_id, str) or not 0 < len(rule_id) <= MAX_ID or any(c not in ID_CHARS for c in rule_id), f"rule_id must be 1 to {MAX_ID} characters from a-z A-Z 0-9 . _ -")
         _bad(rule_id in self.rules, "Rule already exists")
         tgt = _addr(target)
@@ -165,13 +278,28 @@ class Sluice(gl.Contract):
         else:
             _bad(min_value != 0, "min_value needs a min_field")
         _bad(len(t) + len(f) == 0 and fresh_field == "" and min_field == "", "a rule needs at least one condition")
-        digest = hashlib.sha256(json.dumps([tgt.as_hex.lower(), method, parsed, t, f, fresh_field, max_age, min_field, min_value]).encode("utf-8")).hexdigest()
+        digest = hashlib.sha256(json.dumps([tgt.as_hex.lower(), method, parsed, t, f, fresh_field, max_age, min_field, min_value, fact[0], fact[1], fact[2], fact[3]]).encode("utf-8")).hexdigest()
         self.rules[rule_id] = Rule(
             creator=gl.message.sender_address, target=tgt, method=method, args=json.dumps(parsed), must_true=json.dumps(t), must_false=json.dumps(f),
             fresh_field=fresh_field, max_age=max_age, min_field=min_field, min_value=min_value, digest=digest, created_at=self._now(),
             records=0, last_open=False, last_code="", last_at=0,
+            fact_url=fact[0], fact_path=fact[1], fact_value=fact[2], fact_max_age=fact[3], obs_at=0, obs_met=False, observations=0,
         )
         self.rule_ids.append(rule_id)
+
+    @gl.public.write
+    def observe(self, rule_id: str) -> None:
+        """Permissionless. Validators fetch the page this rule names and agree on whether its field reads as the rule expects. The agreed
+        answer and the time are stored, and check() needs it to be met and fresh. A page that cannot be read records nothing."""
+        r = self._get(rule_id)
+        _bad(r.fact_url == "", "This rule has no external fact")
+        now = self._now()
+        _bad(int(r.obs_at) > 0 and now < int(r.obs_at) + MIN_RECHECK, "Observed too recently, try again later")
+        res = _look(r.fact_url, r.fact_path, r.fact_value)
+        _bad(res["kind"] != "read", "Page unreadable, nothing recorded. Try again shortly.")
+        r.obs_at = now
+        r.obs_met = res["met"]
+        r.observations += 1
 
     @gl.public.view
     def check(self, rule_id: str, now: int) -> dict:
@@ -208,6 +336,7 @@ class Sluice(gl.Contract):
             "must_true": json.loads(r.must_true), "must_false": json.loads(r.must_false), "fresh_field": r.fresh_field, "max_age": int(r.max_age),
             "min_field": r.min_field, "min_value": int(r.min_value), "digest": r.digest, "created_at": int(r.created_at),
             "records": int(r.records), "last_open": r.last_open, "last_code": r.last_code, "last_at": int(r.last_at),
+            "fact": {"url": r.fact_url, "path": r.fact_path, "value": r.fact_value, "max_age": int(r.fact_max_age), "observed_at": int(r.obs_at), "met": r.obs_met, "observations": int(r.observations)},
         }
 
     @gl.public.view

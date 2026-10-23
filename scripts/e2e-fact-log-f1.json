@@ -1,0 +1,378 @@
+{
+ "run": "f1",
+ "network": "bradbury",
+ "sluice": "0xB914771C816E5c25d8757E3877244b4B501D6Ff5",
+ "ballast": "0xd1590EBBA44Cd2d00e003053811E47b9d2209668",
+ "monitor": "e2e-v2-covered",
+ "started": "2026-10-23T05:15:51.923Z",
+ "events": [
+  {
+   "t": "2026-10-23T05:15:51.927Z",
+   "scn": "setup",
+   "msg": "sluice 0xB914771C816E5c25d8757E3877244b4B501D6Ff5 on bradbury, target 0xd1590EBBA44Cd2d00e003053811E47b9d2209668 monitor e2e-v2-covered"
+  },
+  {
+   "t": "2026-10-23T05:16:17.640Z",
+   "scn": "ok",
+   "msg": "create_rule_with_fact ok-f1 0x78a66a7345 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0x78a66a7345e91a6f5ccfbeff031af1caf9f91af770e5a887ea76de3dedeb1ac7",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:16:19.543Z",
+   "scn": "ok",
+   "msg": "before any observation: open=false code=no_observation"
+  },
+  {
+   "t": "2026-10-23T05:16:42.667Z",
+   "scn": "unmet",
+   "msg": "create_rule_with_fact un-f1 0x0b71b8c99f ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0x0b71b8c99f2a91d67d4f483aeda505d1573bc364c83f2a66ec0a8edc76deee53",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:16:55.458Z",
+   "scn": "flip",
+   "msg": "create_rule_with_fact fl-f1 0xae4685fe2a ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0xae4685fe2acb4d5d481d2a011cae0e338bc9cd66ce0410b849890931016aad66",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:17:21.720Z",
+   "scn": "flip",
+   "msg": "observe while the page says degraded 0x620ef23328 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0x620ef23328996926dc1b626542980dfeb4170177e591d3cba5c2577c863bcf9a",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:17:26.657Z",
+   "scn": "flip",
+   "msg": "the page said degraded: check open=false code=observation_not_met. Waiting for docs/fact-demo.json on main to say \"ok\" ..."
+  },
+  {
+   "t": "2026-10-23T05:17:47.068Z",
+   "scn": "refusals",
+   "msg": "create_rule pl-f1 (no fact) 0x18f3a1ab07 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x18f3a1ab07727b6b762291dabdbadc6592ab21c35c0ed4c66242b7648fab34b5",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:18:35.912Z",
+   "scn": "refusals",
+   "msg": "observe a rule with no fact 0x1afa0467c2 refused: \"This rule has no external fact\"",
+   "fn": "observe",
+   "hash": "0x1afa0467c28e72a4799a3f8c8b1acd6e66ccffbabdb29e97801b254f58562abf",
+   "refused": true,
+   "reason": "This rule has no external fact"
+  },
+  {
+   "t": "2026-10-23T05:18:48.676Z",
+   "scn": "refusals",
+   "msg": "create_rule_with_fact ur-f1 0xce0ba6f66f ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0xce0ba6f66f9e114d577e521fd4d96e90baf46d9fa5e7238c6e968712a2581948",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:19:03.201Z",
+   "scn": "refusals",
+   "msg": "observe a page that does not exist 0x276e174da1 refused: \"Page unreadable, nothing recorded. Try again shortly.\"",
+   "fn": "observe",
+   "hash": "0x276e174da191bad26ef6cef6ccc1f4d830e13a85b1d9ef572fcfabb9fefdc303",
+   "refused": true,
+   "reason": "Page unreadable, nothing recorded. Try again shortly."
+  },
+  {
+   "t": "2026-10-23T05:19:07.396Z",
+   "scn": "refusals",
+   "msg": "an unreadable page records nothing; the rule stays closed (no_observation)"
+  },
+  {
+   "t": "2026-10-23T05:19:09.156Z",
+   "scn": "refusals",
+   "msg": "create_rule_with_fact with an http url refused: \"url must be https, at most 300 characters\""
+  },
+  {
+   "t": "2026-10-23T05:19:10.804Z",
+   "scn": "refusals",
+   "msg": "create_rule_with_fact with a fact age under a minute refused: \"fact_max_age must be 60 to 2592000 seconds\""
+  },
+  {
+   "t": "2026-10-23T05:19:12.518Z",
+   "scn": "refusals",
+   "msg": "create_rule_with_fact with an empty value refused: \"value must be 1 to 200 characters\""
+  },
+  {
+   "t": "2026-10-23T05:22:21.601Z",
+   "scn": "flip",
+   "msg": "the page now says ok (as served by raw.githubusercontent.com)"
+  },
+  {
+   "t": "2026-10-23T05:22:23.254Z",
+   "scn": "flip",
+   "msg": "waiting 17s for the observation cooldown"
+  },
+  {
+   "t": "2026-10-23T05:23:05.682Z",
+   "scn": "flip",
+   "msg": "observe (try 1) 0xbac4b5cc56 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0xbac4b5cc56f7bc4d47ebf8e9ea797d4f5bbc25e5ad72e93c125f12009adf5de8",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:23:10.585Z",
+   "scn": "flip",
+   "msg": "after observation #2: check open=true code=ok"
+  },
+  {
+   "t": "2026-10-23T05:23:10.585Z",
+   "scn": "flip",
+   "msg": "now waiting for docs/fact-demo.json to say \"degraded\" again ..."
+  },
+  {
+   "t": "2026-10-23T05:27:28.306Z",
+   "scn": "flip",
+   "msg": "waiting 46s for the observation cooldown"
+  },
+  {
+   "t": "2026-10-23T05:28:40.649Z",
+   "scn": "flip",
+   "msg": "observe (try 1) 0x3b70f4567e ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0x3b70f4567ee0f3180a329b559708fd45ba8c8bd34221f35bba990e8072f64f26",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:28:46.456Z",
+   "scn": "flip",
+   "msg": "after observation #3: check open=false code=observation_not_met (the rule follows the page in both directions)"
+  },
+  {
+   "t": "2026-10-23T05:46:22.149Z",
+   "scn": "ok",
+   "msg": "create_rule_with_fact FINALIZED 30.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T05:46:43.365Z",
+   "scn": "unmet",
+   "msg": "create_rule_with_fact FINALIZED 30.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T05:46:57.961Z",
+   "scn": "unmet",
+   "msg": "observe 0xbb9ce0d30e ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0xbb9ce0d30e517da3e3dec7261711c15d316e0ea61398127c914c23113d57cd11",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T05:47:03.176Z",
+   "scn": "unmet",
+   "msg": "the validators agreed the page does not say 9.9.9: check open=false code=observation_not_met"
+  },
+  {
+   "t": "2026-10-23T06:21:01.702Z",
+   "scn": "unmet",
+   "msg": "observe FINALIZED 34.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T06:21:05.579Z",
+   "scn": "ok",
+   "msg": "FAILED: Transaction reverted: EVM tx 0x12fed64a52b569797c7745aaa63985df3a8a300fa08a355881bb57a41753165b to consensus contract 0x0112Bf6e83497965A5fdD6Dad1E447a6E004271D was reverted."
+  },
+  {
+   "t": "2026-10-23T06:21:05.579Z",
+   "scn": "unmet",
+   "msg": "FAILED: Transaction reverted: EVM tx 0x1b66808c4f1b0e808d549fa2d8fde0c6e9ea6b7957c0f755678e26ef9d4bef86 to consensus contract 0x0112Bf6e83497965A5fdD6Dad1E447a6E004271D was reverted."
+  },
+  {
+   "t": "2026-10-23T06:23:30.347Z",
+   "scn": "setup",
+   "msg": "sluice 0xB914771C816E5c25d8757E3877244b4B501D6Ff5 on bradbury, target 0xd1590EBBA44Cd2d00e003053811E47b9d2209668 monitor e2e-v2-covered"
+  },
+  {
+   "t": "2026-10-23T06:23:30.348Z",
+   "scn": "ok",
+   "msg": "create_rule_with_fact ok-f1 already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-23T06:23:30.348Z",
+   "scn": "unmet",
+   "msg": "create_rule_with_fact un-f1 already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-23T06:23:31.108Z",
+   "scn": "unmet",
+   "msg": "create_rule_with_fact FINALIZED 0.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T06:23:32.543Z",
+   "scn": "unmet",
+   "msg": "observe 0xbb9ce0d30e already on chain (resumed)"
+  },
+  {
+   "t": "2026-10-23T06:23:32.710Z",
+   "scn": "ok",
+   "msg": "before any observation: open=false code=no_observation"
+  },
+  {
+   "t": "2026-10-23T06:23:33.009Z",
+   "scn": "ok",
+   "msg": "create_rule_with_fact FINALIZED 0.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T06:23:35.995Z",
+   "scn": "unmet",
+   "msg": "the validators agreed the page does not say 9.9.9: check open=false code=observation_not_met"
+  },
+  {
+   "t": "2026-10-23T06:23:36.268Z",
+   "scn": "unmet",
+   "msg": "observe FINALIZED 0.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T06:23:36.726Z",
+   "scn": "ok",
+   "msg": "consumer deployment attempt 1 failed (Transaction reverted: EVM tx 0x5072663be62202d2404ed533c255bfafea9e86e13bfa8c57ef99651c906), trying again"
+  },
+  {
+   "t": "2026-10-23T06:24:51.121Z",
+   "scn": "ok",
+   "msg": "consumer deployed for ok-f1: 0xB4cE9dDF108379877a9AbeD7fF18cDdD34c66E8f",
+   "hash": "0xf0e18d6bd613f70dd0d1616407422748bc174acd90f4c9b1921a4859c8dc881a",
+   "address": "0xB4cE9dDF108379877a9AbeD7fF18cDdD34c66E8f"
+  },
+  {
+   "t": "2026-10-23T06:24:53.162Z",
+   "scn": "unmet",
+   "msg": "consumer deployment attempt 1 failed (Transaction reverted: EVM tx 0xeacfe6ed46e85f62bbada2112b8e770986742b188d46787a46c87bcf0b9), trying again"
+  },
+  {
+   "t": "2026-10-23T06:24:53.468Z",
+   "scn": "ok",
+   "msg": "the consumer reading finalized state is refused before the page is observed: \"Refused: no_observation \""
+  },
+  {
+   "t": "2026-10-23T06:25:07.953Z",
+   "scn": "ok",
+   "msg": "observe 0x12ee0f405c ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0x12ee0f405c1dc77be04ce9da3682929fe1c796089cc458161efec64b173c1aab",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T06:25:12.789Z",
+   "scn": "ok",
+   "msg": "the validators read the page and agreed: version is 1.3.0. check (latest state): open=true code=ok"
+  },
+  {
+   "t": "2026-10-23T06:25:15.085Z",
+   "scn": "ok",
+   "msg": "the consumer's finalized read while the observation is not final: \"Refused: no_observation \""
+  },
+  {
+   "t": "2026-10-23T06:25:55.749Z",
+   "scn": "unmet",
+   "msg": "consumer deployment attempt 2 failed (Transaction reverted: EVM tx 0x8ea01c55d1052d74946d1eb3e22a1d2d4d9ce5784d13b7688c9dd62895f), trying again"
+  },
+  {
+   "t": "2026-10-23T06:27:09.318Z",
+   "scn": "unmet",
+   "msg": "consumer deployed for un-f1: 0x04194CFddD347e5a2b46acCA8Bf6194546f08F95",
+   "hash": "0xcb2873fa40eab25234337c4c6376a95de74c6862e75ee77d5114f249aadc1447",
+   "address": "0x04194CFddD347e5a2b46acCA8Bf6194546f08F95"
+  },
+  {
+   "t": "2026-10-23T06:28:11.604Z",
+   "scn": "unmet",
+   "msg": "the consumer reading finalized state is refused: \"Refused: observation_not_met \"",
+   "hash": "0x0bf300487a84ae300a720ee76c9f83588270f4164d5defd20c4c142f92057ebe"
+  },
+  {
+   "t": "2026-10-23T07:01:12.373Z",
+   "scn": "ok",
+   "msg": "observe FINALIZED 36.0 min after the wait began"
+  },
+  {
+   "t": "2026-10-23T07:01:25.379Z",
+   "scn": "ok",
+   "msg": "consumer.perform 0x99a814daaa ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "perform",
+   "hash": "0x99a814daaa089e53cb9556dd73ab8f32af2e4f6c388f39136876ed9d4bd09194",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-23T07:01:26.588Z",
+   "scn": "ok",
+   "msg": "FAILED: ok: the consumer did not act: {\"last_note\":\"\",\"performed\":0,\"rule_digest\":\"8fd962c122b6e643c37b8b607c5ad9277a8ce702319320e5d30b896c64db5cb6\",\"rule_id\":\"ok-f1\",\"sluice\":\"0xB914771C816E5c25d8757E3877244b4B501D6Ff5\"}"
+  },
+  {
+   "t": "2026-10-23T07:02:38.430Z",
+   "scn": "ok",
+   "msg": "the consumer acted once the observation was final: performed=1, note \"acted on an open rule with a met fact\""
+  },
+  {
+   "t": "2026-10-23T07:02:43.711Z",
+   "scn": "ok",
+   "msg": "on the caller's clock: exactly the allowed age is open; one second later: observation_stale; before the observation: future"
+  }
+ ],
+ "results": {
+  "refusals": {
+   "plain": "pl-f1",
+   "unreadable": "ur-f1",
+   "bad_terms": [
+    {
+     "label": "an http url",
+     "reason": "url must be https, at most 300 characters"
+    },
+    {
+     "label": "a fact age under a minute",
+     "reason": "fact_max_age must be 60 to 2592000 seconds"
+    },
+    {
+     "label": "an empty value",
+     "reason": "value must be 1 to 200 characters"
+    }
+   ]
+  },
+  "flip": {
+   "id": "fl-f1",
+   "observations": 3,
+   "followed_the_page": true
+  },
+  "unmet": {
+   "id": "un-f1",
+   "consumer": "0x04194CFddD347e5a2b46acCA8Bf6194546f08F95",
+   "refusal": "Refused: observation_not_met "
+  },
+  "ok": {
+   "id": "ok-f1",
+   "consumer": "0xB4cE9dDF108379877a9AbeD7fF18cDdD34c66E8f",
+   "observed_at": 1792736696,
+   "edge": "ok",
+   "late": "observation_stale",
+   "early": "future",
+   "performed": 1,
+   "act": "0x99a814daaa089e53cb9556dd73ab8f32af2e4f6c388f39136876ed9d4bd09194"
+  }
+ },
+ "finished": "2026-10-23T07:02:43.711Z"
+}
