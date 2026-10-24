@@ -9,11 +9,12 @@ Live on **GenLayer Bradbury Testnet** (chain 4221). One contract, no owner, rule
 | Contract | Address |
 |---|---|
 | Sluice v2 (the contract in this repo) | [`0xB914771C816E5c25d8757E3877244b4B501D6Ff5`](https://explorer-bradbury.genlayer.com/address/0xB914771C816E5c25d8757E3877244b4B501D6Ff5) |
+| Sluice v2, the same source on Studionet (chain 61999) | [`0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25`](https://explorer-studio.genlayer.com/address/0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25) |
 | Sluice v1 (no fact; its source is commit `7277b3f`) | [`0xfE2eb041585B7FE25B92285Bb1062aB766C6615B`](https://explorer-bradbury.genlayer.com/address/0xfE2eb041585B7FE25B92285Bb1062aB766C6615B) |
 
 The v2 contract is the v1 contract plus the fact (`create_rule_with_fact`, `observe`); `create_rule`, `check`, `check_pinned` and `record` behave as before for a rule without a fact. The v1 live evidence further down is kept as it was.
 
-Sluice reads other contracts in finalized state, which Studionet cannot answer from inside a contract (a contract-to-contract read of finalized state never returns there), so it is deployed on Bradbury.
+Sluice reads other contracts in finalized state, and Studionet cannot answer that from inside a contract (a contract-to-contract read of finalized state never returns there; the probe is in the Lading repo, `docs/studionet-nested-final-read-probe.py`). So the full contract, including `check` over a contract target and consumers reading Sluice, runs on Bradbury. The identical source is also deployed on Studionet, where the validator flow (`create_rule_with_fact`, `observe`) runs and is evidenced below, but `check` on a rule with a contract target does not return. `scripts/verify-deployed.mjs` proves both deployments are byte for byte the contract in this repo.
 
 ## Why it exists
 
@@ -98,6 +99,7 @@ The threat list was written before the code and each row is tested. It is in [do
 | Direct | `python -m pytest tests/direct/ -v` | 147 in-memory tests with a fake target that records the address, method, arguments and storage state it was asked for, and (`test_sluice_fact.py`) the fact terms, the page matching rules, the observation cooldown, the open and closed verdicts over time, and the validator vote with forged and malformed leader results |
 | Live, v1 | `SLUICE=0x... node scripts/e2e.mjs` | the Bradbury run described below, against the real Ballast contract |
 | Live, v2 | `SLUICE=0x... node scripts/e2e-fact.mjs` | the Bradbury run of the external fact described below, against a real npm page and a page in this repository |
+| Live, v2 on Studionet | `NETWORK=studionet SLUICE=0x... node scripts/e2e-fact-studio.mjs` | the validator flow on Studionet described below (no `check` over a contract target there) |
 | Mutation | `python scripts/mutate.py` | breaks the contract 151 ways, one at a time, and checks a test notices |
 
 Mutation result: 150 of 151 breakages are caught. The one survivor is equivalent: dropping the check that a page size is at least one changes nothing, because a page of zero ids is empty either way. (The 151 include 85 on the fact: its terms, the url rules, the page matching, the validator vote, `observe` and the new verdicts in `check`. A first pass left several url and page-matching mutants alive; each was closed with a test that refuses it for its own reason.)
@@ -189,11 +191,54 @@ The rule watched the `status` field of `docs/fact-demo.json` for `ok`. While the
 Two parts of this run did not go smoothly, and neither was the contract. The first attempt stopped after the flip and refusals scenarios, because the chain's consensus contract reverted the transactions that deploy the two consumer contracts (a contract deployment, not a Sluice call; deploying the same consumer by hand succeeded straight away). The script now retries a deployment, and the run was resumed from its own log: rules and observations already on chain were not sent again. The resumed run needed more than one attempt for the consumer deployments (each attempt that failed is in the log). Then, after the consumer's accepted `perform`, the script read the consumer's state back before the node had caught up with the accepted write and saw `performed` 0; it now polls that read-back, and the final read showed `performed` 1, as the accepted call had set it. The full event log, with every transaction hash and every failed attempt, is `scripts/e2e-fact-log-f1.json`.
 <!--FACT_END-->
 
+<!--STUDIO_START-->
+## Live evidence, version 2 on Studionet (run `s3`, 2026-10-24)
+
+Sluice v2 `0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25` on Studionet, the same source as the Bradbury deployment (`scripts/verify-deployed.mjs` checks both). This run exercises the validator flow, which is the part of v2 that is new: the validators fetch a real public page (npm's registry page for left-pad 1.3.0) and must agree, and the agreed answer and its time are stored. Each rule is read back with `get_rule`. The finalized-read half of the contract (`check` reading the target in finalized state, and a consumer refused until an observation is final) is not run here, because a contract-to-contract read of finalized state never returns on Studionet; it is evidenced on Bradbury above.
+
+### The validators agree a fact is met, and agree it is not
+
+| # | Call | Transaction | Result |
+|---|---|---|---|
+| 1 | `create_rule_with_fact met-s3` | [`0x1cb5c59e82`](https://explorer-studio.genlayer.com/tx/0x1cb5c59e826edbd20cec3c0f24032e57e53ff6deff42c01b0bc8a393e7a0dd49) | accepted |
+| 2 | `observe` | [`0x07bc186008`](https://explorer-studio.genlayer.com/tx/0x07bc1860087ac5c701fb416a6904f8e8adcb0ef7b6ccfd3c08411d961643025f) | accepted |
+
+The rule asks for `version` to read `1.3.0` on npm's page. After `observe` the rule reads back `met` true, `observations` 1, `observed_at` 1792867196.
+
+| # | Call | Transaction | Result |
+|---|---|---|---|
+| 1 | `create_rule_with_fact un-s3` | [`0xeb517b3079`](https://explorer-studio.genlayer.com/tx/0xeb517b307931364263ead16b7bd27063c0cd62a86e574831810799570870bb79) | accepted |
+| 2 | `observe` | [`0x76a88723ea`](https://explorer-studio.genlayer.com/tx/0x76a88723ead13e01d6f1b9b6290b77b28d2718617096093da08efe822a8c7e41) | accepted |
+| 3 | `observe again at once` | [`0x107f7d3257`](https://explorer-studio.genlayer.com/tx/0x107f7d32577674fa5d6c14b29a3d5621f6f4f2cdd42a6cdb7074aadbc40083e9) | refused by the contract: "Observed too recently, try again later" |
+
+The same page for `9.9.9`: the validators agreed it does not say that (`met` false, `observations` 1), and a second `observe` at once was refused (`Observed too recently`) without recording anything.
+
+### Refusals
+
+| # | Call | Transaction | Result |
+|---|---|---|---|
+| 1 | `create_rule_with_fact ur-s3` | [`0x9bf944ce20`](https://explorer-studio.genlayer.com/tx/0x9bf944ce201045da33e5a7e58449174d65836d0699f69569b9da17266029a8b3) | accepted |
+| 2 | `observe a page that does not exist` | [`0x4d7138961e`](https://explorer-studio.genlayer.com/tx/0x4d7138961e76e20a68c421b2a32bdd7d27bf3a12baf10ac69dd4732c914db329) | refused by the contract: "Page unreadable, nothing recorded. Try again shortly." |
+
+A page that returns 404: `observe` was refused and nothing was recorded (`observations` 0, `observed_at` 0).
+
+| # | Call | Transaction | Result |
+|---|---|---|---|
+| 1 | `create_rule pl-s3 (no fact)` | [`0x9d4e694eef`](https://explorer-studio.genlayer.com/tx/0x9d4e694eef18d2cae7dfb0ab2412c97d9a416f25611eebefef23258227ee3d5f) | accepted |
+| 2 | `observe a rule with no fact` | [`0x992bea9a4a`](https://explorer-studio.genlayer.com/tx/0x992bea9a4a6c067cb354b4c8a5c685c168bae195fd1fa4901ad8bd005ddc734c) | refused by the contract: "This rule has no external fact" |
+
+`observe` on a rule with no fact was refused.
+
+### About the run itself
+
+The first attempt of this run stopped part way: the observation of the page that returns 404 sat without settling and the script kept waiting, so it was stopped by hand. A short re-run of the last two scenarios followed while the script was fixed to save its log as it goes, and then the complete run above. The rules of the stopped attempts remain on the contract and are not part of the evidence. The full event log, with every transaction hash, is `scripts/e2e-fact-studio-log-s3.json`.
+<!--STUDIO_END-->
+
 ## Layout
 
 - `contracts/sluice.py`, `contracts/test_support/sluice_consumer.py`
 - `tests/direct/test_sluice.py`, `tests/direct/test_sluice_fact.py`
-- `scripts/deploy.mjs`, `scripts/e2e.mjs` (the v1 live run), `scripts/e2e-fact.mjs` (the v2 live run), `scripts/mutate.py`
+- `scripts/deploy.mjs`, `scripts/e2e.mjs` (the v1 live run), `scripts/e2e-fact.mjs` (the v2 live run on Bradbury), `scripts/e2e-fact-studio.mjs` (the v2 validator flow on Studionet), `scripts/verify-deployed.mjs`, `scripts/mutate.py`
 - `docs/ARCHITECTURE.md`
 - `docs/fact-demo.json` is a page this repo controls, used by the live run to show a rule opening and closing as a page changes
 

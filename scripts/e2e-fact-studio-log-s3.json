@@ -1,0 +1,152 @@
+{
+ "run": "s3",
+ "network": "studionet",
+ "sluice": "0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25",
+ "started": "2026-10-24T18:39:29.109Z",
+ "events": [
+  {
+   "t": "2026-10-24T18:39:29.112Z",
+   "scn": "setup",
+   "msg": "sluice 0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25 on studionet"
+  },
+  {
+   "t": "2026-10-24T18:39:44.602Z",
+   "scn": "met",
+   "msg": "create_rule_with_fact met-s3 0x1cb5c59e82 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0x1cb5c59e826edbd20cec3c0f24032e57e53ff6deff42c01b0bc8a393e7a0dd49",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:40:08.959Z",
+   "scn": "met",
+   "msg": "observe 0x07bc186008 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0x07bc1860087ac5c701fb416a6904f8e8adcb0ef7b6ccfd3c08411d961643025f",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:40:12.165Z",
+   "scn": "met",
+   "msg": "the validators read the page and agreed: version is 1.3.0 (met=true, stored at 1792867196)"
+  },
+  {
+   "t": "2026-10-24T18:40:47.290Z",
+   "scn": "unmet",
+   "msg": "create_rule_with_fact un-s3 0xeb517b3079 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0xeb517b307931364263ead16b7bd27063c0cd62a86e574831810799570870bb79",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:41:10.565Z",
+   "scn": "unmet",
+   "msg": "observe 0x76a88723ea ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "observe",
+   "hash": "0x76a88723ead13e01d6f1b9b6290b77b28d2718617096093da08efe822a8c7e41",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:41:13.245Z",
+   "scn": "unmet",
+   "msg": "the validators agreed the page does not say 9.9.9 (met=false, observation stored)"
+  },
+  {
+   "t": "2026-10-24T18:41:31.280Z",
+   "scn": "unmet",
+   "msg": "observe again at once 0x107f7d3257 refused: \"Observed too recently, try again later\"",
+   "fn": "observe",
+   "hash": "0x107f7d32577674fa5d6c14b29a3d5621f6f4f2cdd42a6cdb7074aadbc40083e9",
+   "refused": true,
+   "reason": "Observed too recently, try again later"
+  },
+  {
+   "t": "2026-10-24T18:41:50.981Z",
+   "scn": "unreadable",
+   "msg": "create_rule_with_fact ur-s3 0x9bf944ce20 ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0x9bf944ce201045da33e5a7e58449174d65836d0699f69569b9da17266029a8b3",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:42:06.865Z",
+   "scn": "unreadable",
+   "msg": "observe a page that does not exist 0x4d7138961e refused: \"Page unreadable, nothing recorded. Try again shortly.\"",
+   "fn": "observe",
+   "hash": "0x4d7138961e76e20a68c421b2a32bdd7d27bf3a12baf10ac69dd4732c914db329",
+   "refused": true,
+   "reason": "Page unreadable, nothing recorded. Try again shortly."
+  },
+  {
+   "t": "2026-10-24T18:42:09.322Z",
+   "scn": "unreadable",
+   "msg": "an unreadable page records nothing: observations 0, no time stored"
+  },
+  {
+   "t": "2026-10-24T18:42:32.639Z",
+   "scn": "plain",
+   "msg": "create_rule pl-s3 (no fact) 0x9d4e694eef ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x9d4e694eef18d2cae7dfb0ab2412c97d9a416f25611eebefef23258227ee3d5f",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:43:07.727Z",
+   "scn": "plain",
+   "msg": "observe a rule with no fact 0x992bea9a4a refused: \"This rule has no external fact\"",
+   "fn": "observe",
+   "hash": "0x992bea9a4a6c067cb354b4c8a5c685c168bae195fd1fa4901ad8bd005ddc734c",
+   "refused": true,
+   "reason": "This rule has no external fact"
+  }
+ ],
+ "results": {
+  "met": {
+   "id": "met-s3",
+   "fact": {
+    "max_age": 86400,
+    "met": true,
+    "observations": 1,
+    "observed_at": 1792867196,
+    "path": "version",
+    "url": "https://registry.npmjs.org/left-pad/1.3.0",
+    "value": "1.3.0"
+   }
+  },
+  "unmet": {
+   "id": "un-s3",
+   "fact": {
+    "max_age": 86400,
+    "met": false,
+    "observations": 1,
+    "observed_at": 1792867251,
+    "path": "version",
+    "url": "https://registry.npmjs.org/left-pad/1.3.0",
+    "value": "9.9.9"
+   },
+   "cooldown": "a second observe at once was refused"
+  },
+  "unreadable": {
+   "id": "ur-s3",
+   "fact": {
+    "max_age": 86400,
+    "met": false,
+    "observations": 0,
+    "observed_at": 0,
+    "path": "version",
+    "url": "https://registry.npmjs.org/left-pad/9.9.9-no-such-version",
+    "value": "1.3.0"
+   }
+  },
+  "plain": {
+   "id": "pl-s3"
+  }
+ },
+ "finished": "2026-10-24T18:43:07.727Z"
+}

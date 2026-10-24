@@ -2,4 +2,3 @@ network: bradbury (chain id 4221)
 IDENTICAL  Sluice v2 (contracts/sluice.py)  0xB914771C816E5c25d8757E3877244b4B501D6Ff5
            on chain sha256 16e17d0a3d8b008943ddc691b0af95ae7b5110d81b766a95ea1e4870022483e7  (16970 chars)
            in repo  sha256 16e17d0a3d8b008943ddc691b0af95ae7b5110d81b766a95ea1e4870022483e7  (16970 chars)
-Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76

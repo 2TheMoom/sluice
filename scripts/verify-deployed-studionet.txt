@@ -1,0 +1,4 @@
+network: studionet (chain id 61999)
+IDENTICAL  Sluice v2 (contracts/sluice.py)  0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25
+           on chain sha256 16e17d0a3d8b008943ddc691b0af95ae7b5110d81b766a95ea1e4870022483e7  (16970 chars)
+           in repo  sha256 16e17d0a3d8b008943ddc691b0af95ae7b5110d81b766a95ea1e4870022483e7  (16970 chars)

@@ -8,6 +8,7 @@ import { chain, NETWORK } from "./network.mjs";
 
 const DEPLOYMENTS = {
   bradbury: [["Sluice v2 (contracts/sluice.py)", "0xB914771C816E5c25d8757E3877244b4B501D6Ff5", "contracts/sluice.py"]],
+  studionet: [["Sluice v2 (contracts/sluice.py)", "0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25", "contracts/sluice.py"]],
 };
 const client = createClient({ chain });
 const norm = (s) => s.replace(/\r\n/g, "\n");

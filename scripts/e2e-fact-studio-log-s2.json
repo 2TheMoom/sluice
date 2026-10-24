@@ -1,0 +1,72 @@
+{
+ "run": "s2",
+ "network": "studionet",
+ "sluice": "0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25",
+ "started": "2026-10-24T18:38:35.204Z",
+ "events": [
+  {
+   "t": "2026-10-24T18:38:35.209Z",
+   "scn": "setup",
+   "msg": "sluice 0xDC5e08F20461D6d0158eb7E58Ea45965A02d1F25 on studionet"
+  },
+  {
+   "t": "2026-10-24T18:38:54.402Z",
+   "scn": "unreadable",
+   "msg": "create_rule_with_fact ur-s2 0x73b602874e ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule_with_fact",
+   "hash": "0x73b602874e039ebe67376a292ea08970d225f2d78ee3b93ecf4b38c33b92f17f",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:39:11.201Z",
+   "scn": "unreadable",
+   "msg": "observe a page that does not exist 0x7c6619b0ab refused: \"Page unreadable, nothing recorded. Try again shortly.\"",
+   "fn": "observe",
+   "hash": "0x7c6619b0abfecd928360cfa1946d775ff66339ee166c19464d8bb41a9c65f9ec",
+   "refused": true,
+   "reason": "Page unreadable, nothing recorded. Try again shortly."
+  },
+  {
+   "t": "2026-10-24T18:39:12.508Z",
+   "scn": "unreadable",
+   "msg": "an unreadable page records nothing: observations 0, no time stored"
+  },
+  {
+   "t": "2026-10-24T18:39:27.520Z",
+   "scn": "plain",
+   "msg": "create_rule pl-s2 (no fact) 0x0a7fbce76e ACCEPTED exec=FINISHED_WITH_RETURN",
+   "fn": "create_rule",
+   "hash": "0x0a7fbce76e7824001098d2e788e8ad3ebc830682a38c85a2864221f76d4afb69",
+   "status": "ACCEPTED",
+   "exec": "FINISHED_WITH_RETURN"
+  },
+  {
+   "t": "2026-10-24T18:39:42.995Z",
+   "scn": "plain",
+   "msg": "observe a rule with no fact 0xd546cff247 refused: \"This rule has no external fact\"",
+   "fn": "observe",
+   "hash": "0xd546cff247d7e1bb595d6fe16b165e65577bc9d6f36e6a93c00948f7597ba0d2",
+   "refused": true,
+   "reason": "This rule has no external fact"
+  }
+ ],
+ "results": {
+  "unreadable": {
+   "id": "ur-s2",
+   "fact": {
+    "max_age": 86400,
+    "met": false,
+    "observations": 0,
+    "observed_at": 0,
+    "path": "version",
+    "url": "https://registry.npmjs.org/left-pad/9.9.9-no-such-version",
+    "value": "1.3.0"
+   }
+  },
+  "plain": {
+   "id": "pl-s2"
+  }
+ },
+ "finished": "2026-10-24T18:39:42.996Z"
+}
